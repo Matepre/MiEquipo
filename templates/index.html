@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiEquipo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f2;
+            color: #1f2937;
+        }
+
+        header {
+            background-color: #14532d;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin-bottom: 0;
+            color: #d1fae5;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .tarjeta {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #14532d;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+
+        button,
+        .boton {
+            display: inline-block;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .boton-principal {
+            background-color: #15803d;
+            color: white;
+        }
+
+        .boton-principal:hover {
+            background-color: #166534;
+        }
+
+        .boton-editar {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .boton-eliminar {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .jugador {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .jugador:last-child {
+            border-bottom: none;
+        }
+
+        .nombre-jugador {
+            font-weight: bold;
+        }
+
+        .nivel {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 5px 9px;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .acciones {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .acciones form {
+            margin: 0;
+        }
+
+        .contador {
+            color: #4b5563;
+            margin-bottom: 20px;
+        }
+
+        .mensaje {
+            background-color: #fef3c7;
+            color: #92400e;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .zona-equipos {
+            text-align: center;
+            background-color: #ecfdf5;
+            border: 1px solid #bbf7d0;
+        }
+
+        .zona-equipos p {
+            color: #4b5563;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        @media (max-width: 550px) {
+            .jugador {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .acciones {
+                flex-wrap: wrap;
+            }
+
+            header h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>MiEquipo</h1>
+        <p>Armá tus equipos de fútbol 5</p>
+    </header>
+
+    <main>
+
+        <section class="tarjeta">
+            <h2>Jugadores registrados</h2>
+
+            <p class="contador">
+                {{ jugadores|length }} de 10 jugadores
+            </p>
+
+            {% if mensaje %}
+                <div class="mensaje">{{ mensaje }}</div>
+            {% endif %}
+
+            {% if jugadores|length < 10 %}
+                <h3>Agregar jugador</h3>
+
+                <form action="/agregar" method="POST">
+                    <label for="nombre">Nombre del jugador</label>
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingresá el nombre"
+                        required
+                    >
+
+                    <label for="nivel">Nivel de juego</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="1">1 - Principiante</option>
+                        <option value="2">2 - Básico</option>
+                        <option value="3" selected>3 - Intermedio</option>
+                        <option value="4">4 - Avanzado</option>
+                        <option value="5">5 - Muy bueno</option>
+                    </select>
+
+                    <button class="boton-principal" type="submit">
+                        Agregar jugador
+                    </button>
+                </form>
+            {% else %}
+                <p>Ya registraste los 10 jugadores disponibles.</p>
+            {% endif %}
+        </section>
+
+        <section class="tarjeta">
+            <h2>Lista de jugadores</h2>
+
+            {% if jugadores %}
+                {% for jugador in jugadores %}
+                    <div class="jugador">
+                        <div>
+                            <div class="nombre-jugador">
+                                {{ jugador.nombre }}
+                            </div>
+
+                            <span class="nivel">
+                                Nivel {{ jugador.nivel }}
+                            </span>
+                        </div>
+
+                        <div class="acciones">
+                            <a
+                                class="boton boton-editar"
+                                href="/editar/{{ jugador.id_jugador }}"
+                            >
+                                Editar
+                            </a>
+
+                            <form
+                                action="/eliminar/{{ jugador.id_jugador }}"
+                                method="POST"
+                                onsubmit="return confirm('¿Estás seguro de que querés eliminar a {{ jugador.nombre|e }}?');"
+                            >
+                                <button
+                                    class="boton-eliminar"
+                                    type="submit"
+                                >
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Todavía no hay jugadores registrados.</p>
+            {% endif %}
+        </section>
+
+        {% if jugadores|length == 10 %}
+            <section class="tarjeta zona-equipos">
+                <h2>¡Es hora de jugar!</h2>
+
+                <p>
+                    Ya están todos los jugadores registrados.
+                    Generá tus dos equipos de fútbol 5.
+                </p>
+
+                <form action="/generar_equipos" method="POST">
+                    <button class="boton-principal" type="submit">
+                        Generar equipos
+                    </button>
+                </form>
+            </section>
+        {% endif %}
+
+    </main>
+
+    <footer>
+        MiEquipo - Organizador de fútbol 5
+    </footer>
+
+    <script>
+        // Guardar la posición antes de enviar un formulario
+        document.querySelectorAll("form").forEach(function(formulario) {
+            formulario.addEventListener("submit", function() {
+                sessionStorage.setItem("scrollIndex", window.scrollY);
+            });
+        });
+
+        // Recuperar la posición al cargar la página
+        window.addEventListener("load", function() {
+            const posicion = sessionStorage.getItem("scrollIndex");
+
+            if (posicion !== null) {
+                sessionStorage.removeItem("scrollIndex");
+                window.scrollTo(0, Number(posicion));
+            }
+        });
+    </script>
+
+</body>
+</html>

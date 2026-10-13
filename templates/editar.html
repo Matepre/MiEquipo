@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar jugador - MiEquipo</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1f5f2;
+            color: #1f2937;
+        }
+
+        header {
+            background-color: #14532d;
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin-bottom: 0;
+            color: #d1fae5;
+        }
+
+        main {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .tarjeta {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #14532d;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .botones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button,
+        .boton-volver {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .boton-guardar {
+            background-color: #15803d;
+            color: white;
+        }
+
+        .boton-guardar:hover {
+            background-color: #166534;
+        }
+
+        .boton-volver {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>MiEquipo</h1>
+        <p>Administrá tus jugadores</p>
+    </header>
+
+    <main>
+        <section class="tarjeta">
+            <h2>Editar jugador</h2>
+
+            <p>Modificá el nombre o el nivel del jugador.</p>
+
+            <form method="POST">
+                <label for="nombre">Nombre del jugador</label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value="{{ jugador.nombre }}"
+                    required
+                >
+
+                <label for="nivel">Nivel de juego</label>
+
+                <select id="nivel" name="nivel" required>
+                    {% for numero in range(1, 6) %}
+                        <option
+                            value="{{ numero }}"
+                            {% if numero == jugador.nivel %}selected{% endif %}
+                        >
+                            {% if numero == 1 %}
+                                1 - Principiante
+                            {% elif numero == 2 %}
+                                2 - Básico
+                            {% elif numero == 3 %}
+                                3 - Intermedio
+                            {% elif numero == 4 %}
+                                4 - Avanzado
+                            {% else %}
+                                5 - Muy bueno
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div class="botones">
+                    <button class="boton-guardar" type="submit">
+                        Guardar cambios
+                    </button>
+
+                    <a class="boton-volver" href="/">
+                        Cancelar y volver
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        MiEquipo - Organizador de fútbol 5
+    </footer>
+
+</body>
+</html>
